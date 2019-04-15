@@ -2,17 +2,134 @@
 <model package="partnerprogram" baseClass="xPDOObject" platform="mysql" defaultEngine="InnoDB" phpdoc-package="partnerprogram"
        version="1.1">
 
-    <object class="partnerProgramItem" table="partnerprogram_items" extends="xPDOSimpleObject">
+    <object class="ppObjects" table="pp_objects" extends="xPDOSimpleObject">
+        <field key="user_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"/>
         <field key="name" dbtype="varchar" precision="100" phptype="string" null="false" default=""/>
+        <field key="area" dbtype="decimal" precision="12,2" phptype="float" null="true" default="0"/>
+        <field key="locality" dbtype="text" phptype="string" null="true" default=""/>
+        <field key="street" dbtype="text" phptype="string" null="true" default=""/>
+        <field key="house" dbtype="text" phptype="string" null="true" default=""/>
+        <field key="coordinates" dbtype="text" phptype="string" null="true" default=""/>
+        <field key="customer" dbtype="text" phptype="string" null="true" default=""/>
+        <field key="contact_name" dbtype="text" phptype="string" null="true" default=""/>
+        <field key="contact_email" dbtype="text" phptype="string" null="true" default=""/>
+        <field key="contact_phone" dbtype="text" phptype="string" null="true" default=""/>
         <field key="description" dbtype="text" phptype="string" null="true" default=""/>
+        <field key="createdon" dbtype="datetime" phptype="datetime" null="true" />
+        <field key="updatedon" dbtype="datetime" phptype="datetime" null="true" />
         <field key="active" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="1"/>
+        <field key="status" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="true"
+               default="0"/>
 
         <index alias="name" name="name" primary="false" unique="false" type="BTREE">
             <column key="name" length="" collation="A" null="false"/>
         </index>
+        <index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
+            <column key="user_id" length="" collation="A" null="false"/>
+        </index>
+        <index alias="status" name="status" primary="false" unique="false" type="BTREE">
+            <column key="status" length="" collation="A" null="false"/>
+        </index>
+        <index alias="area" name="area" primary="false" unique="false" type="BTREE">
+            <column key="area" length="" collation="A" null="false"/>
+        </index>
         <index alias="active" name="active" primary="false" unique="false" type="BTREE">
             <column key="active" length="" collation="A" null="false"/>
         </index>
+
+        <aggregate alias="User" class="modUser" local="user_id" foreign="id" cardinality="one" owner="foreign"/>
+        <aggregate alias="UserProfile" class="modUserProfile" local="user_id" foreign="internalKey" owner="foreign"/>
+        <aggregate alias="Status" class="ppObjectsStatus" local="status" foreign="id" cardinality="one" owner="foreign"/>
+    </object>
+
+    <object class="ppObjectsStatus" table="pp_object_statuses" extends="xPDOSimpleObject">
+        <field key="name" dbtype="varchar" precision="100" phptype="string" null="false"/>
+        <field key="description" dbtype="text" phptype="string" null="true"/>
+        <field key="color" dbtype="char" precision="6" phptype="string" null="true" default="000000"/>
+        <field key="email_user" dbtype="tinyint" precision="1" phptype="integer" null="true" default="0"/>
+        <field key="email_manager" dbtype="tinyint" precision="1" phptype="integer" null="true" default="0"/>
+        <field key="subject_user" dbtype="varchar" precision="255" phptype="string" null="true" default=""/>
+        <field key="subject_manager" dbtype="varchar" precision="255" phptype="string" null="true" default=""/>
+        <field key="body_user" dbtype="int" precision="10" phptype="integer" null="true" default="0"/>
+        <field key="body_manager" dbtype="int" precision="10" phptype="integer" null="true" default="0"/>
+        <field key="active" dbtype="tinyint" precision="1" phptype="integer" null="true" default="1"/>
+        <field key="final" dbtype="tinyint" precision="1" phptype="integer" null="true" default="0"/>
+        <field key="fixed" dbtype="tinyint" precision="1" phptype="integer" null="true" default="0"/>
+        <field key="rank" dbtype="tinyint" precision="1" phptype="integer" attributes="unsigned" null="true"
+               default="0"/>
+        <field key="editable" dbtype="tinyint" precision="1" phptype="integer" null="true" default="1"/>
+
+        <index alias="active" name="active" primary="false" unique="false" type="BTREE">
+            <column key="active" length="" collation="A" null="false"/>
+        </index>
+
+        <aggregate alias="Objects" class="ppObject" local="id" foreign="status" cardinality="many" owner="local"/>
+    </object>
+
+    <object class="ppHistoryLog" table="pp_object_logs" extends="xPDOSimpleObject">
+        <field key="user_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
+               default="0"/>
+        <field key="object_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
+               default="0"/>
+        <field key="description" dbtype="text" phptype="string" null="true"/>
+        <field key="timestamp" dbtype="datetime" phptype="datetime" null="true" />
+        <field key="action" dbtype="varchar" precision="100" phptype="string" null="false" default=""/>
+        <field key="entry" dbtype="varchar" precision="255" phptype="string" null="false" default="0"/>
+        <field key="ip" dbtype="text" phptype="json" null="false"/>
+
+        <index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
+            <column key="user_id" length="" collation="A" null="false"/>
+        </index>
+        <index alias="object_id" name="object_id" primary="false" unique="false" type="BTREE">
+            <column key="object_id" length="" collation="A" null="false"/>
+        </index>
+
+        <aggregate alias="User" class="modUser" local="user_id" foreign="id" owner="foreign" cardinality="one"/>
+        <aggregate alias="UserProfile" class="modUserProfile" local="user_id" foreign="internalKey" owner="foreign"
+                   cardinality="one"/>
+        <aggregate alias="Object" class="ppObject" local="object_id" foreign="id" owner="foreign" cardinality="one"/>
+    </object>
+
+    <object class="ppRewards" table="pp_rewards" extends="xPDOSimpleObject">
+        <field key="user_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
+               default="0"/>
+        <field key="sum" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
+               default="0"/>
+        <field key="description" dbtype="text" phptype="string" null="true"/>
+
+        <index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
+            <column key="user_id" length="" collation="A" null="false"/>
+        </index>
+
+        <aggregate alias="User" class="modUser" local="user_id" foreign="id" owner="foreign" cardinality="one"/>
+        <aggregate alias="UserProfile" class="modUserProfile" local="user_id" foreign="internalKey" owner="foreign"
+                   cardinality="one"/>
+
+    </object>
+
+    <object class="ppBalance" table="pp_balance" extends="xPDOSimpleObject">
+        <field key="user_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
+               default="0"/>
+        <field key="balance" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
+               default="0"/>
+        <field key="possible_balance" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
+               default="0"/>
+        <field key="paid_balance" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
+               default="0"/>
+        <field key="paid" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
+               default="0"/>
+        <field key="phone" dbtype="text" phptype="string" null="true"/>
+        <field key="card" dbtype="text" phptype="string" null="true"/>
+        <field key="description" dbtype="text" phptype="string" null="true"/>
+
+        <index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
+            <column key="user_id" length="" collation="A" null="false"/>
+        </index>
+
+        <aggregate alias="User" class="modUser" local="user_id" foreign="id" owner="foreign" cardinality="one"/>
+        <aggregate alias="UserProfile" class="modUserProfile" local="user_id" foreign="internalKey" owner="foreign"
+                   cardinality="one"/>
+
     </object>
 
 </model>

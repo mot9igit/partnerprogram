@@ -1,9 +1,9 @@
 <?php
 include_once 'setting.inc.php';
 
-$_lang['partnerprogram'] = 'partnerProgram';
-$_lang['partnerprogram_menu_desc'] = 'Пример расширения для разработки.';
-$_lang['partnerprogram_intro_msg'] = 'Вы можете выделять сразу несколько предметов при помощи Shift или Ctrl.';
+$_lang['partnerprogram'] = 'Партнерская программа';
+$_lang['partnerprogram_menu_desc'] = 'Управление партнерской программой.';
+$_lang['partnerprogram_intro_msg'] = 'Вы можете выделять сразу несколько элементов при помощи Shift или Ctrl.';
 
 $_lang['partnerprogram_items'] = 'Предметы';
 $_lang['partnerprogram_item_id'] = 'Id';
