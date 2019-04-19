@@ -13,8 +13,11 @@ class partnerProgram
     function __construct(modX &$modx, array $config = [])
     {
         $this->modx =& $modx;
-        $corePath = MODX_CORE_PATH . 'components/partnerprogram/';
-        $assetsUrl = MODX_ASSETS_URL . 'components/partnerprogram/';
+
+        $this->modx->log(1, 'test');
+
+		$corePath = $this->modx->getOption('partnerprogram_core_path', $config, $this->modx->getOption('core_path') . 'components/partnerprogram/');
+		$assetsUrl = $this->modx->getOption('partnerprogram_assets_url', $config, $this->modx->getOption('assets_url') . 'components/partnerprogram/');
 
         $this->config = array_merge([
             'corePath' => $corePath,

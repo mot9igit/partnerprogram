@@ -20,13 +20,23 @@ partnerProgram.panel.Home = function (config) {
             border: true,
             hideMode: 'offsets',
             items: [{
-                title: _('partnerprogram_items'),
+                title: _('partnerprogram_objects'),
                 layout: 'anchor',
                 items: [{
                     html: _('partnerprogram_intro_msg'),
                     cls: 'panel-desc',
                 }, {
-                    xtype: 'partnerprogram-grid-items',
+                    xtype: 'partnerprogram-grid-objects',
+                    cls: 'main-wrapper',
+                }]
+            },{
+                title: _('partnerprogram_statuses'),
+                layout: 'anchor',
+                items: [{
+                    html: _('partnerprogram_statuses_intro_msg'),
+                    cls: 'panel-desc',
+                }, {
+                    xtype: 'partnerprogram-grid-status',
                     cls: 'main-wrapper',
                 }]
             }]

@@ -1,11 +1,11 @@
 <?php
 
-class partnerProgramItemDisableProcessor extends modObjectProcessor
+class partnerProgramObjectRemoveProcessor extends modObjectProcessor
 {
-    public $objectType = 'partnerProgramItem';
-    public $classKey = 'partnerProgramItem';
+    public $objectType = 'ppObjects';
+    public $classKey = 'ppObjects';
     public $languageTopics = ['partnerprogram'];
-    //public $permission = 'save';
+    //public $permission = 'remove';
 
 
     /**
@@ -19,17 +19,16 @@ class partnerProgramItemDisableProcessor extends modObjectProcessor
 
         $ids = $this->modx->fromJSON($this->getProperty('ids'));
         if (empty($ids)) {
-            return $this->failure($this->modx->lexicon('partnerprogram_item_err_ns'));
+            return $this->failure($this->modx->lexicon('partnerprogram_object_err_ns'));
         }
 
         foreach ($ids as $id) {
             /** @var partnerProgramItem $object */
             if (!$object = $this->modx->getObject($this->classKey, $id)) {
-                return $this->failure($this->modx->lexicon('partnerprogram_item_err_nf'));
+                return $this->failure($this->modx->lexicon('partnerprogram_object_err_nf'));
             }
 
-            $object->set('active', false);
-            $object->save();
+            $object->remove();
         }
 
         return $this->success();
@@ -37,4 +36,4 @@ class partnerProgramItemDisableProcessor extends modObjectProcessor
 
 }
 
-return 'partnerProgramItemDisableProcessor';
+return 'partnerProgramObjectRemoveProcessor';

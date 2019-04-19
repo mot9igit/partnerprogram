@@ -1,9 +1,9 @@
 <?php
 
-class partnerProgramItemGetListProcessor extends modObjectGetListProcessor
+class partnerProgramObjectGetListProcessor extends modObjectGetListProcessor
 {
-    public $objectType = 'partnerProgramItem';
-    public $classKey = 'partnerProgramItem';
+    public $objectType = 'ppObjects';
+    public $classKey = 'ppObjects';
     public $defaultSortField = 'id';
     public $defaultSortDirection = 'DESC';
     //public $permission = 'list';
@@ -58,9 +58,9 @@ class partnerProgramItemGetListProcessor extends modObjectGetListProcessor
         $array['actions'][] = [
             'cls' => '',
             'icon' => 'icon icon-edit',
-            'title' => $this->modx->lexicon('partnerprogram_item_update'),
-            //'multiple' => $this->modx->lexicon('partnerprogram_items_update'),
-            'action' => 'updateItem',
+            'title' => $this->modx->lexicon('partnerprogram_object_update'),
+            //'multiple' => $this->modx->lexicon('partnerprogram_objects_update'),
+            'action' => 'updateObject',
             'button' => true,
             'menu' => true,
         ];
@@ -69,9 +69,9 @@ class partnerProgramItemGetListProcessor extends modObjectGetListProcessor
             $array['actions'][] = [
                 'cls' => '',
                 'icon' => 'icon icon-power-off action-green',
-                'title' => $this->modx->lexicon('partnerprogram_item_enable'),
-                'multiple' => $this->modx->lexicon('partnerprogram_items_enable'),
-                'action' => 'enableItem',
+                'title' => $this->modx->lexicon('partnerprogram_object_enable'),
+                'multiple' => $this->modx->lexicon('partnerprogram_objects_enable'),
+                'action' => 'enableObject',
                 'button' => true,
                 'menu' => true,
             ];
@@ -79,9 +79,9 @@ class partnerProgramItemGetListProcessor extends modObjectGetListProcessor
             $array['actions'][] = [
                 'cls' => '',
                 'icon' => 'icon icon-power-off action-gray',
-                'title' => $this->modx->lexicon('partnerprogram_item_disable'),
-                'multiple' => $this->modx->lexicon('partnerprogram_items_disable'),
-                'action' => 'disableItem',
+                'title' => $this->modx->lexicon('partnerprogram_object_disable'),
+                'multiple' => $this->modx->lexicon('partnerprogram_objects_disable'),
+                'action' => 'disableObject',
                 'button' => true,
                 'menu' => true,
             ];
@@ -91,9 +91,9 @@ class partnerProgramItemGetListProcessor extends modObjectGetListProcessor
         $array['actions'][] = [
             'cls' => '',
             'icon' => 'icon icon-trash-o action-red',
-            'title' => $this->modx->lexicon('partnerprogram_item_remove'),
-            'multiple' => $this->modx->lexicon('partnerprogram_items_remove'),
-            'action' => 'removeItem',
+            'title' => $this->modx->lexicon('partnerprogram_object_remove'),
+            'multiple' => $this->modx->lexicon('partnerprogram_objects_remove'),
+            'action' => 'removeObject',
             'button' => true,
             'menu' => true,
         ];
@@ -103,4 +103,4 @@ class partnerProgramItemGetListProcessor extends modObjectGetListProcessor
 
 }
 
-return 'partnerProgramItemGetListProcessor';
+return 'partnerProgramObjectGetListProcessor';

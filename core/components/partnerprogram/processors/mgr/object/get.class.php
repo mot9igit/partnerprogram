@@ -1,9 +1,9 @@
 <?php
 
-class partnerProgramItemGetProcessor extends modObjectGetProcessor
+class partnerProgramObjectGetProcessor extends modObjectGetProcessor
 {
-    public $objectType = 'partnerProgramItem';
-    public $classKey = 'partnerProgramItem';
+    public $objectType = 'ppObjects';
+    public $classKey = 'ppObjects';
     public $languageTopics = ['partnerprogram:default'];
     //public $permission = 'view';
 
@@ -25,4 +25,4 @@ class partnerProgramItemGetProcessor extends modObjectGetProcessor
 
 }
 
-return 'partnerProgramItemGetProcessor';
+return 'partnerProgramObjectGetProcessor';

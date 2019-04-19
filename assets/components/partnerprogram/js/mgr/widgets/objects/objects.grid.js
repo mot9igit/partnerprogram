@@ -1,7 +1,7 @@
-partnerProgram.grid.Items = function (config) {
+partnerProgram.grid.Objects = function (config) {
     config = config || {};
     if (!config.id) {
-        config.id = 'partnerprogram-grid-items';
+        config.id = 'partnerprogram-grid-objects';
     }
     Ext.applyIf(config, {
         url: partnerProgram.config.connector_url,
@@ -10,12 +10,12 @@ partnerProgram.grid.Items = function (config) {
         tbar: this.getTopBar(config),
         sm: new Ext.grid.CheckboxSelectionModel(),
         baseParams: {
-            action: 'mgr/item/getlist'
+            action: 'mgr/object/getlist'
         },
         listeners: {
             rowDblClick: function (grid, rowIndex, e) {
                 var row = grid.store.getAt(rowIndex);
-                this.updateItem(grid, e, row);
+                this.updateObject(grid, e, row);
             }
         },
         viewConfig: {
@@ -34,7 +34,7 @@ partnerProgram.grid.Items = function (config) {
         remoteSort: true,
         autoHeight: true,
     });
-    partnerProgram.grid.Items.superclass.constructor.call(this, config);
+    partnerProgram.grid.Objects.superclass.constructor.call(this, config);
 
     // Clear selection on grid refresh
     this.store.on('load', function () {
@@ -43,7 +43,7 @@ partnerProgram.grid.Items = function (config) {
         }
     }, this);
 };
-Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
+Ext.extend(partnerProgram.grid.Objects, MODx.grid.Grid, {
     windows: {},
 
     getMenu: function (grid, rowIndex) {
@@ -52,12 +52,12 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
         var row = grid.getStore().getAt(rowIndex);
         var menu = partnerProgram.utils.getMenu(row.data['actions'], this, ids);
 
-        this.addContextMenuItem(menu);
+        this.addContextMenuObject(menu);
     },
 
-    createItem: function (btn, e) {
+    createObject: function (btn, e) {
         var w = MODx.load({
-            xtype: 'partnerprogram-item-window-create',
+            xtype: 'partnerprogram-object-window-create',
             id: Ext.id(),
             listeners: {
                 success: {
@@ -72,7 +72,7 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
         w.show(e.target);
     },
 
-    updateItem: function (btn, e, row) {
+    updateObject: function (btn, e, row) {
         if (typeof(row) != 'undefined') {
             this.menu.record = row.data;
         }
@@ -84,14 +84,14 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
         MODx.Ajax.request({
             url: this.config.url,
             params: {
-                action: 'mgr/item/get',
+                action: 'mgr/object/get',
                 id: id
             },
             listeners: {
                 success: {
                     fn: function (r) {
                         var w = MODx.load({
-                            xtype: 'partnerprogram-item-window-update',
+                            xtype: 'partnerprogram-object-window-update',
                             id: Ext.id(),
                             record: r,
                             listeners: {
@@ -111,21 +111,21 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
         });
     },
 
-    removeItem: function () {
+    removeObject: function () {
         var ids = this._getSelectedIds();
         if (!ids.length) {
             return false;
         }
         MODx.msg.confirm({
             title: ids.length > 1
-                ? _('partnerprogram_items_remove')
-                : _('partnerprogram_item_remove'),
+                ? _('partnerprogram_objects_remove')
+                : _('partnerprogram_object_remove'),
             text: ids.length > 1
-                ? _('partnerprogram_items_remove_confirm')
-                : _('partnerprogram_item_remove_confirm'),
+                ? _('partnerprogram_objects_remove_confirm')
+                : _('partnerprogram_object_remove_confirm'),
             url: this.config.url,
             params: {
-                action: 'mgr/item/remove',
+                action: 'mgr/object/remove',
                 ids: Ext.util.JSON.encode(ids),
             },
             listeners: {
@@ -139,7 +139,7 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
         return true;
     },
 
-    disableItem: function () {
+    disableObject: function () {
         var ids = this._getSelectedIds();
         if (!ids.length) {
             return false;
@@ -147,7 +147,7 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
         MODx.Ajax.request({
             url: this.config.url,
             params: {
-                action: 'mgr/item/disable',
+                action: 'mgr/object/disable',
                 ids: Ext.util.JSON.encode(ids),
             },
             listeners: {
@@ -160,7 +160,7 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
         })
     },
 
-    enableItem: function () {
+    enableObject: function () {
         var ids = this._getSelectedIds();
         if (!ids.length) {
             return false;
@@ -168,7 +168,7 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
         MODx.Ajax.request({
             url: this.config.url,
             params: {
-                action: 'mgr/item/enable',
+                action: 'mgr/object/enable',
                 ids: Ext.util.JSON.encode(ids),
             },
             listeners: {
@@ -187,22 +187,22 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
 
     getColumns: function () {
         return [{
-            header: _('partnerprogram_item_id'),
+            header: _('partnerprogram_object_id'),
             dataIndex: 'id',
             sortable: true,
             width: 70
         }, {
-            header: _('partnerprogram_item_name'),
+            header: _('partnerprogram_object_name'),
             dataIndex: 'name',
             sortable: true,
             width: 200,
         }, {
-            header: _('partnerprogram_item_description'),
+            header: _('partnerprogram_object_description'),
             dataIndex: 'description',
             sortable: false,
             width: 250,
         }, {
-            header: _('partnerprogram_item_active'),
+            header: _('partnerprogram_object_active'),
             dataIndex: 'active',
             renderer: partnerProgram.utils.renderBoolean,
             sortable: true,
@@ -219,8 +219,8 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
 
     getTopBar: function () {
         return [{
-            text: '<i class="icon icon-plus"></i>&nbsp;' + _('partnerprogram_item_create'),
-            handler: this.createItem,
+            text: '<i class="icon icon-plus"></i>&nbsp;' + _('partnerprogram_object_create'),
+            handler: this.createObject,
             scope: this
         }, '->', {
             xtype: 'partnerprogram-field-search',
@@ -284,4 +284,4 @@ Ext.extend(partnerProgram.grid.Items, MODx.grid.Grid, {
         this.getBottomToolbar().changePage(1);
     },
 });
-Ext.reg('partnerprogram-grid-items', partnerProgram.grid.Items);
+Ext.reg('partnerprogram-grid-objects', partnerProgram.grid.Objects);

@@ -1,14 +1,14 @@
-partnerProgram.window.CreateItem = function (config) {
+partnerProgram.window.CreateObject = function (config) {
     config = config || {};
     if (!config.id) {
-        config.id = 'partnerprogram-item-window-create';
+        config.id = 'partnerprogram-object-window-create';
     }
     Ext.applyIf(config, {
-        title: _('partnerprogram_item_create'),
+        title: _('partnerprogram_object_create'),
         width: 550,
         autoHeight: true,
         url: partnerProgram.config.connector_url,
-        action: 'mgr/item/create',
+        action: 'mgr/object/create',
         fields: this.getFields(config),
         keys: [{
             key: Ext.EventObject.ENTER, shift: true, fn: function () {
@@ -16,28 +16,28 @@ partnerProgram.window.CreateItem = function (config) {
             }, scope: this
         }]
     });
-    partnerProgram.window.CreateItem.superclass.constructor.call(this, config);
+    partnerProgram.window.CreateObject.superclass.constructor.call(this, config);
 };
-Ext.extend(partnerProgram.window.CreateItem, MODx.Window, {
+Ext.extend(partnerProgram.window.CreateObject, MODx.Window, {
 
     getFields: function (config) {
         return [{
             xtype: 'textfield',
-            fieldLabel: _('partnerprogram_item_name'),
+            fieldLabel: _('partnerprogram_object_name'),
             name: 'name',
             id: config.id + '-name',
             anchor: '99%',
             allowBlank: false,
         }, {
             xtype: 'textarea',
-            fieldLabel: _('partnerprogram_item_description'),
+            fieldLabel: _('partnerprogram_object_description'),
             name: 'description',
             id: config.id + '-description',
             height: 150,
             anchor: '99%'
         }, {
             xtype: 'xcheckbox',
-            boxLabel: _('partnerprogram_item_active'),
+            boxLabel: _('partnerprogram_object_active'),
             name: 'active',
             id: config.id + '-active',
             checked: true,
@@ -48,20 +48,20 @@ Ext.extend(partnerProgram.window.CreateItem, MODx.Window, {
     }
 
 });
-Ext.reg('partnerprogram-item-window-create', partnerProgram.window.CreateItem);
+Ext.reg('partnerprogram-object-window-create', partnerProgram.window.CreateObject);
 
 
-partnerProgram.window.UpdateItem = function (config) {
+partnerProgram.window.UpdateObject = function (config) {
     config = config || {};
     if (!config.id) {
-        config.id = 'partnerprogram-item-window-update';
+        config.id = 'partnerprogram-object-window-update';
     }
     Ext.applyIf(config, {
-        title: _('partnerprogram_item_update'),
+        title: _('partnerprogram_object_update'),
         width: 550,
         autoHeight: true,
         url: partnerProgram.config.connector_url,
-        action: 'mgr/item/update',
+        action: 'mgr/object/update',
         fields: this.getFields(config),
         keys: [{
             key: Ext.EventObject.ENTER, shift: true, fn: function () {
@@ -69,9 +69,9 @@ partnerProgram.window.UpdateItem = function (config) {
             }, scope: this
         }]
     });
-    partnerProgram.window.UpdateItem.superclass.constructor.call(this, config);
+    partnerProgram.window.UpdateObject.superclass.constructor.call(this, config);
 };
-Ext.extend(partnerProgram.window.UpdateItem, MODx.Window, {
+Ext.extend(partnerProgram.window.UpdateObject, MODx.Window, {
 
     getFields: function (config) {
         return [{
@@ -80,21 +80,21 @@ Ext.extend(partnerProgram.window.UpdateItem, MODx.Window, {
             id: config.id + '-id',
         }, {
             xtype: 'textfield',
-            fieldLabel: _('partnerprogram_item_name'),
+            fieldLabel: _('partnerprogram_object_name'),
             name: 'name',
             id: config.id + '-name',
             anchor: '99%',
             allowBlank: false,
         }, {
             xtype: 'textarea',
-            fieldLabel: _('partnerprogram_item_description'),
+            fieldLabel: _('partnerprogram_object_description'),
             name: 'description',
             id: config.id + '-description',
             anchor: '99%',
             height: 150,
         }, {
             xtype: 'xcheckbox',
-            boxLabel: _('partnerprogram_item_active'),
+            boxLabel: _('partnerprogram_object_active'),
             name: 'active',
             id: config.id + '-active',
         }];
@@ -104,4 +104,4 @@ Ext.extend(partnerProgram.window.UpdateItem, MODx.Window, {
     }
 
 });
-Ext.reg('partnerprogram-item-window-update', partnerProgram.window.UpdateItem);
+Ext.reg('partnerprogram-object-window-update', partnerProgram.window.UpdateObject);

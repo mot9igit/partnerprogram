@@ -15,8 +15,10 @@ class partnerProgramHomeManagerController extends modExtraManagerController
      */
     public function initialize()
     {
-        $this->partnerProgram = $this->modx->getService('partnerProgram', 'partnerProgram', MODX_CORE_PATH . 'components/partnerprogram/model/');
-        parent::initialize();
+		$corePath = $this->modx->getOption('partnerprogram_core_path', $config, $this->modx->getOption('core_path') . 'components/partnerprogram/');
+		$assetsUrl = $this->modx->getOption('partnerprogram_assets_url', $config, $this->modx->getOption('assets_url') . 'components/partnerprogram/');
+		$this->partnerProgram = $this->modx->getService('partnerProgram', 'partnerProgram', $corePath . 'model/');
+		parent::initialize();
     }
 
 
@@ -56,8 +58,12 @@ class partnerProgramHomeManagerController extends modExtraManagerController
         $this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/partnerprogram.js');
         $this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/misc/utils.js');
         $this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/misc/combo.js');
-        $this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/widgets/items.grid.js');
-        $this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/widgets/items.windows.js');
+		$this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/misc/default.grid.js');
+		$this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/misc/default.window.js');
+        $this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/widgets/objects/objects.grid.js');
+        $this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/widgets/objects/objects.windows.js');
+		$this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/widgets/status/grid.js');
+		$this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/widgets/status/window.js');
         $this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/widgets/home.panel.js');
         $this->addJavascript($this->partnerProgram->config['jsUrl'] . 'mgr/sections/home.js');
 

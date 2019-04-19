@@ -1,9 +1,9 @@
 <?php
 
-class partnerProgramItemUpdateProcessor extends modObjectUpdateProcessor
+class partnerProgramObjectUpdateProcessor extends modObjectUpdateProcessor
 {
-    public $objectType = 'partnerProgramItem';
-    public $classKey = 'partnerProgramItem';
+    public $objectType = 'ppObjects';
+    public $classKey = 'ppObjects';
     public $languageTopics = ['partnerprogram'];
     //public $permission = 'save';
 
@@ -32,17 +32,17 @@ class partnerProgramItemUpdateProcessor extends modObjectUpdateProcessor
         $id = (int)$this->getProperty('id');
         $name = trim($this->getProperty('name'));
         if (empty($id)) {
-            return $this->modx->lexicon('partnerprogram_item_err_ns');
+            return $this->modx->lexicon('partnerprogram_object_err_ns');
         }
 
         if (empty($name)) {
-            $this->modx->error->addField('name', $this->modx->lexicon('partnerprogram_item_err_name'));
+            $this->modx->error->addField('name', $this->modx->lexicon('partnerprogram_object_err_name'));
         } elseif ($this->modx->getCount($this->classKey, ['name' => $name, 'id:!=' => $id])) {
-            $this->modx->error->addField('name', $this->modx->lexicon('partnerprogram_item_err_ae'));
+            $this->modx->error->addField('name', $this->modx->lexicon('partnerprogram_object_err_ae'));
         }
 
         return parent::beforeSet();
     }
 }
 
-return 'partnerProgramItemUpdateProcessor';
+return 'partnerProgramObjectUpdateProcessor';
