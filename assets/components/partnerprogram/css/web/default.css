@@ -1,0 +1,44 @@
+@import url("./lib/jquery.jgrowl.min.css");
+div.jGrowl > .ui-state-highlight {
+    background: inherit;
+    color: inherit;
+    border: inherit;
+}
+.pp-message-success { background-color: green !important; }
+.pp-message-error { background-color: brown !important; }
+.pp-message-info { background-color: black !important; }
+
+.steps-form .step{
+     display: none;
+ }
+
+.steps-form .step.active{
+    display: block;
+}
+
+.yandex-map{
+    height: 400px;
+}
+
+.form .form-container a{
+    color: #ffffff;
+}
+
+#office-profile-form .header{
+    padding: 15px 15px !important;
+}
+
+.nav .nav-item i{
+    width: 30px;
+    text-align: center;
+}
+
+.nav .nav-item ul{
+    list-style-type: none;
+    padding: 0 0 0 35px;
+    margin: 0;
+}
+
+.nav .nav-item ul a{
+    font-size: 14px;
+}

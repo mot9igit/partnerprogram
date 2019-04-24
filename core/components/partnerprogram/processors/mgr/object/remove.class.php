@@ -1,11 +1,10 @@
 <?php
 
-class partnerProgramObjectRemoveProcessor extends modObjectProcessor
+class ppObjectRemoveProcessor extends modObjectProcessor
 {
-    public $objectType = 'ppObjects';
     public $classKey = 'ppObjects';
     public $languageTopics = ['partnerprogram'];
-    //public $permission = 'remove';
+    public $permission = 'remove';
 
 
     /**
@@ -17,7 +16,8 @@ class partnerProgramObjectRemoveProcessor extends modObjectProcessor
             return $this->failure($this->modx->lexicon('access_denied'));
         }
 
-        $ids = $this->modx->fromJSON($this->getProperty('ids'));
+        $ids = $this->getProperty('ids');
+        //$this->modx->log(1, $this->getProperty('ids'));
         if (empty($ids)) {
             return $this->failure($this->modx->lexicon('partnerprogram_object_err_ns'));
         }
@@ -36,4 +36,4 @@ class partnerProgramObjectRemoveProcessor extends modObjectProcessor
 
 }
 
-return 'partnerProgramObjectRemoveProcessor';
+return 'ppObjectRemoveProcessor';

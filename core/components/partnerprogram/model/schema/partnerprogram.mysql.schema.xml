@@ -7,6 +7,7 @@
         <field key="name" dbtype="varchar" precision="100" phptype="string" null="false" default=""/>
         <field key="area" dbtype="decimal" precision="12,2" phptype="float" null="true" default="0"/>
         <field key="locality" dbtype="text" phptype="string" null="true" default=""/>
+		<field key="city" dbtype="text" phptype="string" null="true" default=""/>
         <field key="street" dbtype="text" phptype="string" null="true" default=""/>
         <field key="house" dbtype="text" phptype="string" null="true" default=""/>
         <field key="coordinates" dbtype="text" phptype="string" null="true" default=""/>
@@ -93,17 +94,20 @@
     <object class="ppRewards" table="pp_rewards" extends="xPDOSimpleObject">
         <field key="user_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
                default="0"/>
+		<field key="object_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
+               default="0"/>
         <field key="sum" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false"
                default="0"/>
         <field key="description" dbtype="text" phptype="string" null="true"/>
 
         <index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
             <column key="user_id" length="" collation="A" null="false"/>
-        </index>
-
+        </index>		
+		
         <aggregate alias="User" class="modUser" local="user_id" foreign="id" owner="foreign" cardinality="one"/>
         <aggregate alias="UserProfile" class="modUserProfile" local="user_id" foreign="internalKey" owner="foreign"
                    cardinality="one"/>
+		<aggregate alias="Object" class="ppObject" local="object_id" foreign="id" owner="foreign" cardinality="one"/>
 
     </object>
 

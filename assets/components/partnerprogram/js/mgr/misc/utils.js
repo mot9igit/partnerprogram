@@ -60,6 +60,37 @@ partnerProgram.utils.getMenu = function (actions, grid, selected) {
     return menu;
 };
 
+partnerProgram.utils.userLink = function (value, id, blank) {
+    if (!value) {
+        return '';
+    }
+    else if (!id) {
+        return value;
+    }
+
+    return String.format(
+        '<a href="?a=security/user/update&id={0}" class="pp-link" target="{1}">{2}</a>',
+        id,
+        (blank ? '_blank' : '_self'),
+        value
+    );
+};
+
+partnerProgram.utils.renderImage = function (value) {
+    if (Ext.isEmpty(value)) {
+        value = partnerProgram.config['default_thumb'];
+    }
+    else {
+        if (!/\/\//.test(value)) {
+            if (!/^\//.test(value)) {
+                value = '/' + value;
+            }
+        }
+    }
+
+    return String.format('<img src="{0}" />', value);
+};
+
 partnerProgram.utils.renderActions = function (value, props, row) {
     var res = [];
     var cls, icon, title, action, item;

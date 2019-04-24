@@ -1,7 +1,7 @@
 partnerProgram.panel.Home = function (config) {
     config = config || {};
     Ext.apply(config, {
-        baseCls: 'modx-formpanel',
+        baseCls: 'modx-formpanel x-panel container',
         layout: 'anchor',
         /*
          stateful: true,
@@ -37,6 +37,36 @@ partnerProgram.panel.Home = function (config) {
                     cls: 'panel-desc',
                 }, {
                     xtype: 'partnerprogram-grid-status',
+                    cls: 'main-wrapper',
+                }]
+            },{
+                title: _('partnerprogram_balance'),
+                layout: 'anchor',
+                items: [{
+                    html: _('partnerprogram_balance_intro_msg'),
+                    cls: 'panel-desc',
+                }, {
+                    xtype: 'partnerprogram-grid-balance',
+                    cls: 'main-wrapper',
+                }]
+            },{
+                title: _('partnerprogram_rewards'),
+                layout: 'anchor',
+                items: [{
+                    html: _('partnerprogram_rewards_intro_msg'),
+                    cls: 'panel-desc',
+                }, {
+                    xtype: 'partnerprogram-grid-rewards',
+                    cls: 'main-wrapper',
+                }]
+            },{
+                title: _('partnerprogram_history'),
+                layout: 'anchor',
+                items: [{
+                    html: _('partnerprogram_history_intro_msg'),
+                    cls: 'panel-desc',
+                }, {
+                    xtype: 'partnerprogram-grid-history',
                     cls: 'main-wrapper',
                 }]
             }]

@@ -11,8 +11,8 @@ if (!defined('MODX_CORE_PATH')) {
 return [
     'name' => 'partnerProgram',
     'name_lower' => 'partnerprogram',
-    'version' => '2.0.0',
-    'release' => 'pl',
+    'version' => '1.0.0',
+    'release' => 'beta',
     // Install package to site right after build
     'install' => true,
     // Which elements should be updated on package upgrade
@@ -21,7 +21,7 @@ return [
         'menus' => true,
         'plugins' => true,
         'resources' => false,
-        'settings' => false,
+        'settings' => true,
         'snippets' => true,
         'templates' => false,
         'widgets' => false,

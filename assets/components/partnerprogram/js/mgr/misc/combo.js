@@ -166,3 +166,30 @@ partnerProgram.combo.Status = function (config) {
 };
 Ext.extend(partnerProgram.combo.Status, MODx.combo.ComboBox);
 Ext.reg('partnerprogram-combo-status', partnerProgram.combo.Status);
+
+
+partnerProgram.combo.Object = function (config) {
+    config = config || {};
+
+    Ext.applyIf(config, {
+        name: 'object',
+        id: 'partnerprogram-combo-object',
+        hiddenName: 'object_id',
+        displayField: 'name',
+        valueField: 'id',
+        fields: ['id', 'name'],
+        pageSize: 10,
+        emptyText: _('partnerprogram_combo_select_object'),
+        url: partnerProgram.config['connector_url'],
+        baseParams: {
+            action: 'mgr/object/getlist',
+            combo: true,
+            addall: config.addall || 0,
+            object_id: config.object_id || 0
+        },
+        listeners: partnerProgram.combo.listeners_disable
+    });
+    partnerProgram.combo.Object.superclass.constructor.call(this, config);
+};
+Ext.extend(partnerProgram.combo.Object, MODx.combo.ComboBox);
+Ext.reg('partnerprogram-combo-object', partnerProgram.combo.Object);

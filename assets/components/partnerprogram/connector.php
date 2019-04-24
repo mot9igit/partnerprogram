@@ -18,17 +18,17 @@ require_once MODX_CONNECTORS_PATH . 'index.php';
 /** @var partnerProgram $partnerProgram */
 $corePath = $modx->getOption('partnerprogram_core_path', $config, $modx->getOption('core_path') . 'components/partnerprogram/');
 $assetsUrl = $modx->getOption('partnerprogram_assets_url', $config, $modx->getOption('assets_url') . 'components/partnerprogram/');
-$partnerProgram = $modx->getService('partnerProgram', 'partnerProgram', $corePath . 'model/');
+$partnerProgram = $modx->getService('partnerProgram', 'partnerProgram', $corePath . 'components/partnerprogram/model/');
 $modx->lexicon->load('partnerprogram:default');
 
 // handle request
 //$corePath = $modx->getOption('partnerprogram_core_path', null, $modx->getOption('core_path') . 'components/partnerprogram/');
-$path = $modx->getOption('processorsPath', $partnerProgram->config, $corePath . 'processors/');
+$path = $modx->getOption('processorsPath', $partnerProgram->config, $corePath . 'components/partnerprogram/processors/');
 
 // echo $corePath;
 
 /** @var modConnectorRequest $request */
-$path = $modx->getOption('processorsPath', $partnerProgram->config, $corePath . 'processors/');
+$path = $modx->getOption('processorsPath', $partnerProgram->config, $corePath . 'components/partnerprogram/processors/');
 $modx->request->handleRequest(array(
 	'processors_path' => $path,
 	'location' => '',

@@ -5,7 +5,7 @@ class partnerProgramObjectDisableProcessor extends modObjectProcessor
     public $objectType = 'ppObjects';
     public $classKey = 'ppObjects';
     public $languageTopics = ['partnerprogram'];
-    //public $permission = 'save';
+    public $permission = 'save';
 
 
     /**
