@@ -42,3 +42,10 @@ div.jGrowl > .ui-state-highlight {
 .nav .nav-item ul a{
     font-size: 14px;
 }
+
+.navbar .navbar-brand {
+    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #fff;
+}

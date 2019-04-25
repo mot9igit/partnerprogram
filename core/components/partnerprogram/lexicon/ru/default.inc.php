@@ -5,28 +5,22 @@ $_lang['partnerprogram'] = 'Партнерская программа';
 $_lang['partnerprogram_menu_desc'] = 'Управление партнерской программой.';
 $_lang['partnerprogram_intro_msg'] = 'Вы можете выделять сразу несколько элементов при помощи Shift или Ctrl.';
 
-$lang["setting_partnerprogram_apikey_yandex"] = "Ключ API Яндекса";
-$lang["setting_partnerprogram_date_format"] = "Формат даты";
-$lang["setting_partnerprogram_email_manager"] = "Список email менеджера";
-$lang["setting_partnerprogram_paid"] = "Сколько начислять за объект в рублях";
-$lang["setting_partnerprogram_minimal_paid"] = "Минимальный порог для выплат в рублях";
+$_lang["partnerprogram_profile_save"] = "Сохранить";
+$_lang["partnerprogram_balance_updated"] = "Информация обновлена";
+$_lang["partnerprogram_removing_error"] = "Ошибка при удалении";
+$_lang["partnerprogram_removing_success"] = "Объект удален";
 
-$lang["partnerprogram_profile_save"] = "Сохранить";
-$lang["partnerprogram_balance_updated"] = "Информация обновлена";
-$lang["partnerprogram_removing_error"] = "Ошибка при удалении";
-$lang["partnerprogram_removing_success"] = "Объект удален";
+$_lang["partnerprogram_object_found"] = "Объект найден";
+$_lang["partnerprogram_object_not_found"] = "Объект не найден";
 
-$lang["partnerprogram_object_found"] = "Объект найден";
-$lang["partnerprogram_object_not_found"] = "Объект не найден";
+$_lang["partnerprogram_nonono"] = "У вас нет прав на редактирование";
+$_lang["partnerprogram_nonono_status"] = "Статус объекта не позволяет его редактировать";
+$_lang["partnerprogram_object_updated"] = "Объект обновлен";
 
-$lang["partnerprogram_nonono"] = "У вас нет прав на редактирование";
-$lang["partnerprogram_nonono_status"] = "Статус объекта не позволяет его редактировать";
-$lang["partnerprogram_object_updated"] = "Объект обновлен";
-
-$lang["partnerprogram_err_status_final"] = "Статус объекта финальный, смена невозможна";
-$lang["partnerprogram_err_status_fixed"] = "Статус объекта зафиксирован, смена возможна только на последующие статусы";
-$lang["partnerprogram_err_status_same"] = "Этот статус уже установлен";
-$lang["partnerprogram_payed"] = "Сумма поставлена в очередь на выплату.";
+$_lang["partnerprogram_err_status_final"] = "Статус объекта финальный, смена невозможна";
+$_lang["partnerprogram_err_status_fixed"] = "Статус объекта зафиксирован, смена возможна только на последующие статусы";
+$_lang["partnerprogram_err_status_same"] = "Этот статус уже установлен";
+$_lang["partnerprogram_payed"] = "Сумма поставлена в очередь на выплату.";
 
 
 /* ---------------- Основное ----------------------- */

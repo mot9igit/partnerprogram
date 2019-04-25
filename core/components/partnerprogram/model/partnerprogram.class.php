@@ -307,10 +307,12 @@ class partnerProgram
 	 */
 	public function objectAdd($data)
 	{
-		$userId = $this->modx->user->id;
+		if(!$data['user_id']){
+			$data['user_id'] = $this->modx->user->id;
+		}
 		if ($data['name']){
 			$object = $this->modx->newObject('ppObjects');
-			$object->set('user_id', $userId);
+			$object->set('user_id', $data['user_id']);
 			$object->set('name', $data['name']);
 			$object->set('area', $data['area']);
 			$object->set('locality', $data['province']);
@@ -373,12 +375,12 @@ class partnerProgram
 		$object = $this->modx->getObject("ppObjects", $datas['id']);
 		$user_id = $object->get("user_id");
 		$status = $object->get("status");
-		$data['action'] = "balance/update";
+		$data['action'] = "object/update";
 		if($user_id != $this->modx->user->id){
-			return $this->success("partnerprogram_nonono", $data);
+			return $this->error("partnerprogram_nonono", $data);
 		}
 		if($status != 1){
-			return $this->success("partnerprogram_nonono_status", $data);
+			return $this->error("partnerprogram_nonono_status", $data);
 		}
  		foreach($datas as $key => $value){
 			if($key != 'user_id' && $key != 'pp_action' && $key != 'status' && $key != 'id'){
@@ -394,9 +396,17 @@ class partnerProgram
 	 */
 	public function objectRemove($data)
 	{
-		$box = $this->modx->getObject('ppObjects',$data['id']);
+		$object = $this->modx->getObject("ppObjects", $data['id']);
+		$user_id = $object->get("user_id");
+		$status = $object->get("status");
 		$data['action'] = "object/remove";
-		if ($box->remove() == false) {
+		if($user_id != $this->modx->user->id){
+			return $this->error("partnerprogram_nonono", $data);
+		}
+		if($status != 1){
+			return $this->error("partnerprogram_nonono_status", $data);
+		}
+		if ($object->remove() == false) {
 			$this->error("partnerprogram_removing_error", $data);
 		}
 		return $this->success("partnerprogram_removing_success", $data);
