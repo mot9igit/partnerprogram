@@ -12,6 +12,7 @@
         <field key="house" dbtype="text" phptype="string" null="true" default=""/>
         <field key="coordinates" dbtype="text" phptype="string" null="true" default=""/>
         <field key="customer" dbtype="text" phptype="string" null="true" default=""/>
+        <field key="typepol" dbtype="text" phptype="string" null="true" default=""/>
         <field key="contact_name" dbtype="text" phptype="string" null="true" default=""/>
         <field key="contact_email" dbtype="text" phptype="string" null="true" default=""/>
         <field key="contact_phone" dbtype="text" phptype="string" null="true" default=""/>

@@ -246,12 +246,15 @@ class partnerProgram
 		if($jsonAddressData['response']['GeoObjectCollection']['featureMember'][0]){
 			$data = $jsonAddressData['response']['GeoObjectCollection']['featureMember'][0];
 			$datas['address'] = $data['GeoObject']['metaDataProperty']['GeocoderMetaData']['text'];
-			$datas['coordinates'] = str_replace(" ", ",", $data['GeoObject']['Point']['pos']);;
+			$datas['coordinates'] = explode(",", str_replace(" ", ",", $data['GeoObject']['Point']['pos']));
+			$datas['mark'] = $datas['coordinates'];
 			$datas['postal_code'] = $data['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['postal_code'];
 			foreach($data['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['Components'] as $comp){
 				$datas[$comp['kind']] = $comp['name'];
 			}
 		}
+		//$this->modx->log(1, print_r($jsonAddressData['response']['GeoObjectCollection']['featureMember'][0]));
+		$datas["zoom"] = 14;
 
 		return $datas;
 	}
@@ -310,7 +313,7 @@ class partnerProgram
 		if(!$data['user_id']){
 			$data['user_id'] = $this->modx->user->id;
 		}
-		if ($data['name']){
+		if ($data['house']){
 			$object = $this->modx->newObject('ppObjects');
 			$object->set('user_id', $data['user_id']);
 			$object->set('name', $data['name']);
@@ -319,11 +322,22 @@ class partnerProgram
 			$object->set('city', $data['locality']);
 			$object->set('street', $data['street']);
 			$object->set('house', $data['house']);
+			/* --------------------------------------------- */
+			$object->set('customer', $data['customer']);
+			$object->set('typepol', $data['typepol']);
+			$object->set('contact_name', $data['contact_name']);
+			$object->set('contact_email', $data['contact_email']);
+			$object->set('contact_phone', $data['contact_phone']);
+			/* --------------------------------------------- */
 			$object->set('createdon', date('Y-m-d H:i:s'));
 			$object->set('updatedon', date('Y-m-d H:i:s'));
 			$object->set('status', 1);
 			$object->set('coordinates', $data['coordinates']);
 			$object->save();
+			$this->changeObjectStatus($object->get("id"), 1);
+			if($data["customer"] && $data["typepol"] && $data["contact_name"] && $data["contact_email"] && $data["contact_phone"]){
+				$this->changeObjectStatus($object->get("id"), 2);
+			}
 		}
 		$data['action'] = "object/add";
 		return $this->success("partnerprogram_object_add", $data);
@@ -382,13 +396,20 @@ class partnerProgram
 		if($status != 1){
 			return $this->error("partnerprogram_nonono_status", $data);
 		}
- 		foreach($datas as $key => $value){
-			if($key != 'user_id' && $key != 'pp_action' && $key != 'status' && $key != 'id'){
+ 		foreach($datas as $key => $value) {
+			if ($key != 'user_id' && $key != 'pp_action' && $key != 'status' && $key != 'id') {
 				$object->set($key, $value);
 			}
 		}
-		$object->save();
-		return $this->success("partnerprogram_object_updated", $data);
+
+		if($datas["customer"] && $datas["typepol"] && $datas["contact_name"] && $datas["contact_email"] && $datas["contact_phone"]){
+			$object->save();
+			$this->changeObjectStatus($datas['id'], 2);
+			return $this->success("partnerprogram_object_updated", $data);
+		}else{
+			return $this->error("partnerprogram_object_update_required", $data);
+		}
+
 	}
 
 	/**
@@ -454,8 +475,8 @@ class partnerProgram
 		if(!$object){
 			return array(
 				'position' => array(
-					'100.540011',
-					'62.973206'
+					'62.973206',
+					'100.540011'
 				),
 				'mark' => false,
 				'zoom' => 4
@@ -472,8 +493,8 @@ class partnerProgram
 		}else {
 			return array(
 				'position' => array(
-					'100.540011',
-					'62.973206'
+					'62.973206',
+					'100.540011'
 				),
 				'mark' => false,
 				'zoom' => 4
@@ -486,9 +507,12 @@ class partnerProgram
 	 * SEND_MONEY
 	 *
 	 */
-	public function sendmoney(){
+	public function sendmoney($id){
+		if(!$id){
+			$id = $this->modx->user->id;
+		}
 		$criteria = array(
-			'user_id' => $this->modx->user->id,
+			'user_id' => $id,
 		);
 		$balance = $this->modx->getObject("ppBalance", $criteria);
 		$possible = $balance->get("possible_balance");
@@ -506,7 +530,8 @@ class partnerProgram
 		if (!empty($subject)) {
 			foreach ($emails as $email) {
 				if (preg_match('#.*?@.*#', $email)) {
-					$this->sendEmail($email, $subject, $body);
+					// если нужны письма
+					//$this->sendEmail($email, $subject, $body);
 				}
 			}
 		}
@@ -631,7 +656,11 @@ class partnerProgram
 		if (!$response['success']) {
 			return $response['message'];
 		}
+		if($status_id == 4 && $_POST["description"] == ''){
+			return $this->modx->lexicon('partnerprogram_object_not_description');
+		}
 		$object->set('status', $status_id);
+		$object->set('description', $_POST["description"]);
 		if ($object->save()) {
 			$this->objectLog($object->get('id'), 'status', $status_id);
 			$response = $this->invokeEvent('ppOnChangeObjectStatus', array(
@@ -642,6 +671,20 @@ class partnerProgram
 				return $response['message'];
 			}
 
+			if (!$user = $this->modx->getObject('modUser', $object->get("user_id"))) {
+				return $this->modx->lexicon('partnerprogram_object_not_found');
+			}
+
+			if (!$user_contacts = $this->modx->getObject('ppBalance', array('user_id' => $object->get("user_id")))) {
+				return $this->modx->lexicon('partnerprogram_object_not_found');
+			}
+
+			$profile = $user->getOne("Profile");
+
+			$data_r["fields"] = $object->toArray();
+			$data_r["user"] = $profile->toArray();
+			$data_r["user_contacts"] = $user_contacts->toArray();
+
 			if ($status->get('email_manager')) {
 				$pls = array();
 				$subject = $this->pdoTools->getChunk('@INLINE ' . $status->get('subject_manager'), $pls);
@@ -649,7 +692,7 @@ class partnerProgram
 				if ($chunk = $this->modx->getObject('modChunk', array('id' => $status->get('body_manager')))) {
 					$tpl = $chunk->get('name');
 				}
-				$body = $this->pdoTools->getChunk($tpl);
+				$body = $this->pdoTools->getChunk($tpl, $data_r);
 				$emails = array_map('trim', explode(',',
 						$this->modx->getOption('partnerprogram_email_manager', null, $this->modx->getOption('emailsender')))
 				);
@@ -669,7 +712,7 @@ class partnerProgram
 					if ($chunk = $this->modx->getObject('modChunk', array('id' => $status->get('body_user')))) {
 						$tpl = $chunk->get('name');
 					}
-					$body = $this->pdoTools->getChunk($tpl);
+					$body = $this->pdoTools->getChunk($tpl, $data_r);
 					$email = $profile->get('email');
 					if (!empty($subject) && preg_match('#.*?@.*#', $email)) {
 						$this->sendEmail($email, $subject, $body);
@@ -715,7 +758,28 @@ class partnerProgram
 				$response = $this->objectCheck($datas);
 				break;
 			case 'object/add':
-				$response = $this->objectAdd(@$data);
+				if($_REQUEST["area"] > 99) {
+					if ($data['address']) {
+						$datas = $data['address'];
+					} else {
+						if ($_REQUEST["province"]) {
+							$datas = $_REQUEST["province"] . ', ' . $_REQUEST["city"] . ', ' . $_REQUEST["street"] . ', ' . $_REQUEST["house"];
+						} else {
+							$datas = $_REQUEST["locality"] . ', ' . $_REQUEST["city"] . ', ' . $_REQUEST["street"] . ', ' . $_REQUEST["house"];
+						}
+
+					}
+					$response = json_decode($this->objectCheck($datas), 1);
+					if ($response["success"]) {
+						$response = $this->objectAdd($_REQUEST);
+					}else{
+						$response["data"]["action"] = "object/add";
+						$response = json_encode($response);
+					}
+				}else{
+					$sdata["action"] = "object/add";
+					$response = $this->error("partnerprogram_small_area", $sdata);
+				}
 				break;
 			case 'object/get':
 				$response = $this->objectGet(@$data);
@@ -730,13 +794,15 @@ class partnerProgram
 				$response = $this->balanceUpdate(@$data);
 				break;
 			case 'balance/sendmoney':
-				$response = $this->sendmoney(@$data);
+				$response = $this->sendmoney(false);
 				break;
 			case 'mapdata/get':
 				//$this->modx->log(1, print_r($_REQUEST, 1));
+
 				$data['coordinates'] = explode(",", $_REQUEST["coordinates"]);
-				$data['address'] = $_REQUEST["province"].', '.$_REQUEST["city"].', '.$_REQUEST["street"].', '.$_REQUEST["house"];
-				$response = $this->getMapStartCoordinates($data);
+				$data['address'] = $_REQUEST["province"].', '.$_REQUEST["locality"].', '.$_REQUEST["street"].', '.$_REQUEST["house"];
+				$datas = $this->getCoordinates($data['address']);
+				$response = $this->getMapStartCoordinates($datas);
 				break;
 			default:
 				$message = ($data['pp_action'] != $action)

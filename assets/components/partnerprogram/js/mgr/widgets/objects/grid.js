@@ -23,22 +23,22 @@ Ext.extend(partnerProgram.grid.Objects, partnerProgram.grid.Default, {
 
     getFields: function () {
         return [
-            'id', 'name', 'area', 'locality', 'city', 'street', 'house',
-            'coordinates', 'customer', 'contact_name', 'contact_email', 'contact_phone',
+            'id', 'name', 'area', 'locality', 'city', 'street', 'house', 'typepol',
+            'coordinates', 'customeru', 'customer','contact_name', 'contact_email', 'contact_phone',
             'description', 'createdon', 'updatedon', 'active', 'status', 'actions', 'status_row', 'user_id'
         ];
     },
 
     getColumns: function () {
         return [
-            {header: _('partnerprogram_object_id'), dataIndex: 'id', width: 30},
-            {header: _('partnerprogram_object_name'), dataIndex: 'name', width: 50, renderer: this._renderColor},
-            {header: _('partnerprogram_object_area'), dataIndex: 'area', width: 50},
-            {header: _('partnerprogram_object_createdon'), dataIndex: 'createdon', width: 50},
-            {header: _('partnerprogram_object_user_id'), dataIndex: 'customer', width: 100, renderer: function(val, cell, row) {
+            {header: _('partnerprogram_object_id'), dataIndex: 'id', width: 30, sortable: true},
+            {header: _('partnerprogram_object_name'), dataIndex: 'name', width: 50, renderer: this._renderColor, sortable: true},
+            {header: _('partnerprogram_object_area'), dataIndex: 'area', width: 50, sortable: true},
+            {header: _('partnerprogram_object_createdon'), dataIndex: 'createdon', width: 50, sortable: true},
+            {header: _('partnerprogram_object_user_id'), dataIndex: 'customeru', width: 100, renderer: function(val, cell, row) {
                     return partnerProgram.utils.userLink(val, row.data['user_id'], true);
-                }},
-            {header: _('partnerprogram_object_status'), dataIndex: 'status_row', width: 50},
+                }, sortable: true},
+            {header: _('partnerprogram_object_status'), dataIndex: 'status_row', width: 50, sortable: true},
             {
                 header: _('partnerprogram_actions'),
                 dataIndex: 'actions',

@@ -51,6 +51,24 @@ Ext.extend(partnerProgram.window.CreateObject, partnerProgram.window.Default, {
                         id: config.id + '-object-house',
                         anchor: '99%'
                     }, {
+                        xtype: 'textfield',
+                        id: config.id + '-object-customer',
+                        fieldLabel: _('partnerprogram_object_customer'),
+                        name: 'customer',
+                        anchor: '99%'
+                    },{
+                        xtype: 'textfield',
+                        id: config.id + '-object-contact_email',
+                        fieldLabel: _('partnerprogram_object_contact_email'),
+                        name: 'contact_email',
+                        anchor: '99%'
+                    },{
+                        xtype: 'combo-typepol',
+                        id: config.id + '-object-contact_typepol',
+                        fieldLabel: _('partnerprogram_object_typepol'),
+                        name: 'typepol',
+                        anchor: '99%'
+                    }, {
                         xtype: 'xdatetime',
                         fieldLabel: _('partnerprogram_object_createdon'),
                         name: 'createdon',
@@ -86,9 +104,15 @@ Ext.extend(partnerProgram.window.CreateObject, partnerProgram.window.Default, {
                         anchor: '99%'
                     }, {
                         xtype: 'textfield',
-                        id: config.id + '-object-customer',
-                        fieldLabel: _('partnerprogram_object_customer'),
-                        name: 'customer',
+                        id: config.id + '-object-contact_name',
+                        fieldLabel: _('partnerprogram_object_contact_name'),
+                        name: 'contact_name',
+                        anchor: '99%'
+                    },{
+                        xtype: 'textfield',
+                        id: config.id + '-object-contact_phone',
+                        fieldLabel: _('partnerprogram_object_contact_phone'),
+                        name: 'contact_phone',
                         anchor: '99%'
                     }, {
                         xtype: 'xdatetime',

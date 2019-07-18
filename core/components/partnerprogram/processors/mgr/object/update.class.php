@@ -7,8 +7,26 @@ class partnerProgramObjectUpdateProcessor extends modObjectUpdateProcessor
     public $languageTopics = ['partnerprogram'];
     public $permission = 'save';
 
+	protected $status;
+
 	/** @var  partnerProgram $partnerProgram */
 	protected $partnerProgram;
+
+
+	/**
+	 * @return bool|null|string
+	 */
+	public function beforeSet()
+	{
+		foreach (array('status') as $v) {
+			$this->$v = $this->object->get($v);
+			if (!$this->getProperty($v)) {
+				$this->addFieldError($v, $this->modx->lexicon('parnerProgram_err_ns'));
+			}
+		}
+
+		return parent::beforeSet();
+	}
 
 	/**
 	 * @return bool|null|string
@@ -27,6 +45,7 @@ class partnerProgramObjectUpdateProcessor extends modObjectUpdateProcessor
 	 */
 	public function beforeSave()
 	{
+		//$this->modx->log(1, $this->object->get('status')." != ".$this->status);
 		if ($this->object->get('status') != $this->status) {
 			$change_status = $this->partnerProgram->changeObjectStatus($this->object->get('id'),
 				$this->object->get('status'));
@@ -37,27 +56,6 @@ class partnerProgramObjectUpdateProcessor extends modObjectUpdateProcessor
 		$this->object->set('updatedon', time());
 		return parent::beforeSave();
 	}
-
-
-    /**
-     * @return bool
-     */
-    public function beforeSet()
-    {
-        $id = (int)$this->getProperty('id');
-        $name = trim($this->getProperty('name'));
-        if (empty($id)) {
-            return $this->modx->lexicon('partnerprogram_object_err_ns');
-        }
-
-        if (empty($name)) {
-            $this->modx->error->addField('name', $this->modx->lexicon('partnerprogram_object_err_name'));
-        } elseif ($this->modx->getCount($this->classKey, ['name' => $name, 'id:!=' => $id])) {
-            $this->modx->error->addField('name', $this->modx->lexicon('partnerprogram_object_err_ae'));
-        }
-
-        return parent::beforeSet();
-    }
 }
 
 return 'partnerProgramObjectUpdateProcessor';

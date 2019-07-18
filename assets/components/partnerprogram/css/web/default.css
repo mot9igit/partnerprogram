@@ -49,3 +49,7 @@ div.jGrowl > .ui-state-highlight {
     text-transform: uppercase;
     color: #fff;
 }
+
+.suggestions-promo svg{
+    display: none !important;
+}

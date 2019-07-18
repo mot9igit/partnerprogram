@@ -148,7 +148,7 @@
                         if (data_r.success) {
                             $(".steps-form .step").removeClass('active');
                             $(".steps-form .step.step-2").addClass('active');
-                            $(".steps-form .step.step-2 input[name=name]").val(data_r.data.address);
+                            //$(".steps-form .step.step-2 input[name=name]").val(data_r.data.address);
                             $(".steps-form .step.step-2 input[name=coordinates]").val(data_r.data.coordinates);
                             $(".steps-form .step.step-2 input[name=province]").val(data_r.data.province);
                             $(".steps-form .step.step-2 input[name=locality]").val(data_r.data.locality);
@@ -165,15 +165,23 @@
                         buildMapUp(data_r.data);
                     }
                     if (data_r.data.action == "object/add") {
-                        partnerProgram.Message.success("Объект успешно добавлен!");
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 1000);
-
+                        if (data_r.success) {
+                            partnerProgram.Message.success("Объект успешно добавлен!");
+                            setTimeout(function () {
+                                $("#thanks").modal("show");
+                            }, 1000);
+                        }else{
+                            partnerProgram.Message.error(data_r.message);
+                            $(".steps-form .message").html("<div class='alert alert-warning'>" + data_r.message + "</div>")
+                        }
                     }
                     if (data_r.data.action == "object/get") {
                         for (var index in data_r.data.fields) {
-                            $("#update-object").find("input[name="+index+"]").val(data_r.data.fields[index]);
+                            if(index == "typepol"){
+                                $("#update-object").find("select[name="+index+"] option[value="+data_r.data.fields[index]+"]").attr("selected", true);
+                            }else{
+                                $("#update-object").find("input[name="+index+"]").val(data_r.data.fields[index]);
+                            }
                         };
                         $("#update-object").modal("show");
                         partnerProgram.buildMapUp();
@@ -335,7 +343,7 @@
     };
 
     partnerProgram.rebuildMap = function () {
-        var data = $(".map-form").serialize()+'&action=object/check';
+        var data = $(".map-form").serialize()+'&action=mapdata/get';
         partnerProgram.send(data);
     };
 
@@ -345,7 +353,7 @@
     };
 
     partnerProgram.rebuildMapUp = function () {
-        var data = $(".map-formUp").serialize()+'&action=object/check';
+        var data = $(".map-formUp").serialize()+'&action=mapdata/get';
         partnerProgram.send(data);
     };
 
@@ -377,13 +385,15 @@ ymaps.ready(init);
 
 function init() {
     if($("#yandex-map").length){
+        var parameters = JSON.parse('{"position":["56.229398","58.010374"],"zoom":4,"balloon":"","mark":false,"getCoordinates":true}');
         buildMap(parameters, false);
     }
 }
 
-function getCoordinates(coordinates) {
+function getCoordinates(coord) {
+    var coordinates = coord.reverse();
     var string = String(coordinates);
-    string = string.replace(',', '|');
+    string = string.replace('|', ',');
 
     return string;
 }
@@ -407,7 +417,7 @@ function buildMap(parameters) {
         );
     }
 
-    if (! myPlacemark && parameters.mark !== false) {
+    if (!myPlacemark && parameters.mark !== false) {
         myPlacemark = new ymaps.Placemark([parameters.mark[1], parameters.mark[0]], {
             balloonContent: parameters.balloon,
             hintContent: ""
@@ -424,7 +434,15 @@ function buildMap(parameters) {
         myMap.geoObjects.add(myPlacemark);
     }
 
-    if (! myPlacemark && parameters.mark === false) {
+    if(myPlacemark && parameters.mark !== false){
+        myPlacemark.geometry.setCoordinates([parameters.mark[1], parameters.mark[0]]);
+    }
+
+    if(myPlacemark && parameters.mark === false){
+        myMap.geoObjects.remove(myPlacemark);
+    }
+
+    if (!myPlacemark && parameters.mark === false) {
         myMap.events.once('click', function (e) {
             if (typeof myMap.geoObjects.get(0) == 'undefined') {
                 var coords = e.get('coords');
@@ -473,10 +491,11 @@ var myPlacemarkUp;
 
 var parameters = JSON.parse(ppConfig.default_map_data);
 
-ymaps.ready(init);
+ymaps.ready(init2);
 
-function init() {
+function init2() {
     if($("#yandex-map-2").length){
+        var parameters = JSON.parse('{"position":["66.25","94.15"],"zoom":4,"balloon":"","mark":false,"getCoordinates":true}');
         buildMapUp(parameters, false);
     }
 }
@@ -489,79 +508,170 @@ function getCoordinatesUp(coordinates) {
 }
 
 function buildMapUp(parameters) {
-    if (! myMapUp) {
-        myMapUp = new ymaps.Map("yandex-map-2", {
-            center: [parameters.position[1], parameters.position[0]],
-            zoom: parameters.zoom
-        });
-    } else {
-        var zoom = myMapUp.getZoom();
+    if($("#yandex-map-2").length) {
+        if (! myMapUp) {
+            myMapUp = new ymaps.Map("yandex-map-2", {
+                center: [parameters.position[1], parameters.position[0]],
+                zoom: parameters.zoom
+            });
+        } else {
+            var zoom = myMapUp.getZoom();
 
-        if (parameters.zoom > zoom) {
-            zoom = parameters.zoom;
+            if (parameters.zoom > zoom) {
+                zoom = parameters.zoom;
+            }
+
+            myMapUp.setCenter(
+                [parameters.position[1], parameters.position[0]],
+                zoom
+            );
         }
 
-        myMapUp.setCenter(
-            [parameters.position[1], parameters.position[0]],
-            zoom
-        );
-    }
+        if (parameters.mark !== false) {
+            if(myPlacemark && parameters.mark !== false){
+                myMapUp.geoObjects.remove(myPlacemarkUp);
+            }
+            myPlacemarkUp = new ymaps.Placemark([parameters.mark[1], parameters.mark[0]], {
+                balloonContent: parameters.balloon,
+                hintContent: ""
+            }, {
+                draggable: true
+            });
 
-    if (! myPlacemarkUp && parameters.mark !== false) {
-        myPlacemarkUp = new ymaps.Placemark([parameters.mark[1], parameters.mark[0]], {
-            balloonContent: parameters.balloon,
-            hintContent: ""
-        }, {
-            draggable: true
-        });
+            myPlacemarkUp.events.add('dragend', function (e) {
+                var coords = myPlacemark.geometry.getCoordinates()
 
-        myPlacemarkUp.events.add('dragend', function (e) {
-            var coords = myPlacemark.geometry.getCoordinates()
+                $('#coordinatesUp').val(getCoordinates(coords));
+            });
 
-            $('#coordinatesUp').val(getCoordinates(coords));
-        });
+            myMapUp.geoObjects.add(myPlacemarkUp);
+        }
 
-        myMapUp.geoObjects.add(myPlacemarkUp);
-    }
+        if(myPlacemarkUp && parameters.mark !== false){
+            myPlacemarkUp.geometry.setCoordinates([parameters.mark[1], parameters.mark[0]]);
+        }
 
-    if (! myPlacemarkUp && parameters.mark === false) {
-        myMapUp.events.once('click', function (e) {
-            if (typeof myMap.geoObjects.get(0) == 'undefined') {
-                var coords = e.get('coords');
+        if (! myPlacemarkUp && parameters.mark === false) {
+            myMapUp.events.once('click', function (e) {
+                if (typeof myMap.geoObjects.get(0) == 'undefined') {
+                    var coords = e.get('coords');
 
-                myPlacemarkUp = new ymaps.Placemark([coords[0], coords[1]], {
-                    balloonContent: "",
-                    hintContent: ""
-                }, {
-                    draggable: true,
-                    openEmptyBalloon: true
-                });
+                    myPlacemarkUp = new ymaps.Placemark([coords[0], coords[1]], {
+                        balloonContent: "",
+                        hintContent: ""
+                    }, {
+                        draggable: true,
+                        openEmptyBalloon: true
+                    });
 
-                myPlacemarkUp.events.add('dragend', function (e) {
-                    var coords = myPlacemarkUp.geometry.getCoordinates()
+                    myPlacemarkUp.events.add('dragend', function (e) {
+                        var coords = myPlacemarkUp.geometry.getCoordinates()
 
-                    $('#coordinatesUp').val(getCoordinates(coords));
+                        $('#coordinatesUp').val(getCoordinates(coords));
 
-                    ymaps.geocode(coords, {
+                        ymaps.geocode(coords, {
+                            results: 1,
+                            json: true
+                        }).then(function (res) {
+                            findMarkAddress(res);
+                        });
+                    });
+
+                    ymaps.geocode(myPlacemarkUp.geometry.getCoordinates(), {
                         results: 1,
                         json: true
                     }).then(function (res) {
                         findMarkAddress(res);
                     });
-                });
-
-                ymaps.geocode(myPlacemarkUp.geometry.getCoordinates(), {
-                    results: 1,
-                    json: true
-                }).then(function (res) {
-                    findMarkAddress(res);
-                });
 
 
-                myMap.geoObjects.add(myPlacemarkUp);
+                    myMapUp.geoObjects.add(myPlacemarkUp);
 
-                $('#coordinatesUp').val(getCoordinates(myPlacemarkUp.geometry.getCoordinates()));
-            }
-        });
+                    $('#coordinatesUp').val(getCoordinates(myPlacemarkUp.geometry.getCoordinates()));
+                }
+            });
+        }
     }
 }
+
+function join(arr /*, separator */) {
+    var separator = arguments.length > 1 ? arguments[1] : ", ";
+    return arr.filter(function(n){return n}).join(separator);
+}
+
+function formatCity(suggestion) {
+    var address = suggestion.data;
+    if (address.city_with_type === address.region_with_type) {
+        return address.settlement_with_type || "";
+    } else {
+        return join([
+            address.city_with_type,
+            address.settlement_with_type]);
+    }
+}
+
+var
+    token = "e69153e5e95c4aa8419d943e588ac4076d44f384",
+    type  = "ADDRESS",
+    $region = $("#in_region"),
+    $city   = $("#in_city"),
+    $street = $("#in_street"),
+    $house  = $("#in_house");
+
+// регион и район
+$region.suggestions({
+    token: token,
+    type: type,
+    hint: false,
+    bounds: "region-area"
+});
+
+// город и населенный пункт
+$city.suggestions({
+    token: token,
+    type: type,
+    hint: false,
+    bounds: "city-settlement",
+    constraints: $region,
+    formatSelected: formatCity
+});
+
+// улица
+$street.suggestions({
+    token: token,
+    type: type,
+    hint: false,
+    bounds: "street",
+    constraints: $city,
+    count: 15
+});
+
+// дом
+$house.suggestions({
+    token: token,
+    type: type,
+    hint: false,
+    noSuggestionsHint: false,
+    bounds: "house",
+    constraints: $street
+});
+
+$("#in_address").suggestions({
+    token: token,
+    type: "ADDRESS",
+    /* Вызывается, когда пользователь выбирает одну из подсказок */
+    onSelect: function(suggestion) {
+        console.log(suggestion);
+    }
+});
+
+
+console.log($house.suggestions());
+
+$('select[name=typepol]').change(function(){
+    if($(this).val()){
+        $(this).parent().find("label").addClass("hidden");
+    }else{
+        $(this).parent().find("label").removeClass("hidden");
+    }
+})

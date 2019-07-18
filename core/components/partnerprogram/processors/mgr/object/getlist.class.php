@@ -53,15 +53,15 @@ class ppObjectsGetListProcessor extends modObjectGetListProcessor
 				'status' => $status,
 			));
 		}
-		if ($customer = $this->getProperty('customer')) {
+		if ($customeru = $this->getProperty('customeru')) {
 			$c->where(array(
-				'user_id' => (int)$customer,
+				'user_id' => (int)$customeru,
 			));
 		}
 		$this->query = $c;
 		$c->select(
 			$this->modx->getSelectColumns('ppObjects', 'ppObjects', '', array('Status'), true) . ',
-            UserProfile.fullname as customer, User.username as customer_username,
+            UserProfile.fullname as customeru, User.username as customeru_username,
             Status.name as status_name, Status.color as status_color'
 		);
 		return $c;

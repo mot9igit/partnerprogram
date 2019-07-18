@@ -193,3 +193,25 @@ partnerProgram.combo.Object = function (config) {
 };
 Ext.extend(partnerProgram.combo.Object, MODx.combo.ComboBox);
 Ext.reg('partnerprogram-combo-object', partnerProgram.combo.Object);
+
+partnerProgram.combo.typepol = function(config) {
+    config = config || {};
+    Ext.applyIf(config,{
+        store: new Ext.data.ArrayStore({
+            id: 0
+            ,fields: ['typepol','display']
+            ,emptyText: _('partnerprogram_combo_select_typepol')
+            ,data: [
+                [1,'Топпинговые']
+                ,[2,'Полимерные']
+            ]
+        })
+        ,mode: 'local'
+        ,hiddenName: 'typepol'
+        ,displayField: 'display'
+        ,valueField: 'typepol'
+    });
+    partnerProgram.combo.typepol.superclass.constructor.call(this,config);
+};
+Ext.extend(partnerProgram.combo.typepol,MODx.combo.ComboBox);
+Ext.reg('combo-typepol',partnerProgram.combo.typepol);

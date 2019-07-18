@@ -20,6 +20,7 @@ $_lang["partnerprogram_object_updated"] = "Объект обновлен";
 $_lang["partnerprogram_err_status_final"] = "Статус объекта финальный, смена невозможна";
 $_lang["partnerprogram_err_status_fixed"] = "Статус объекта зафиксирован, смена возможна только на последующие статусы";
 $_lang["partnerprogram_err_status_same"] = "Этот статус уже установлен";
+$_lang["partnerprogram_object_not_description"] = "Для того, чтобы сохранить объект, введите причину отклонения в поле описания объекта.";
 $_lang["partnerprogram_payed"] = "Сумма поставлена в очередь на выплату.";
 
 
@@ -64,14 +65,18 @@ $_lang['partnerprogram_object_city'] = 'Город';
 $_lang['partnerprogram_object_street'] = 'Улица';
 $_lang['partnerprogram_object_house'] = 'Дом';
 $_lang['partnerprogram_object_coordinates'] = 'Координаты';
-$_lang['partnerprogram_object_customer'] = 'Компания';
-$_lang['partnerprogram_object_contact_name'] = 'ФИО контакта';
-$_lang['partnerprogram_object_contact_email'] = 'Контактный email';
-$_lang['partnerprogram_object_contact_phone'] = 'Контактный телефон';
+$_lang['partnerprogram_object_customer'] = 'Наименование заказчика проектных работ';
+$_lang['partnerprogram_object_contact_name'] = 'Контактное лицо';
+$_lang['partnerprogram_object_contact_email'] = 'E-mail контактного лица';
+$_lang['partnerprogram_object_contact_phone'] = 'Телефон контактного лица';
+$_lang['partnerprogram_object_typepol'] = "Тип полов";
 $_lang['partnerprogram_object_createdon'] = 'Дата создания';
 $_lang['partnerprogram_object_updatedon'] = 'Дата редактирования';
 $_lang['partnerprogram_object_status'] = 'Статус';
 $_lang['partnerprogram_object_active'] = 'Активно';
+$_lang['partnerprogram_combo_select_typepol'] = "Выберите тип пола";
+
+$_lang["partnerprogram_small_area"] = "Площадь должна быть больше 100 кв. м.";
 
 $_lang['partnerprogram_object_create'] = 'Создать объект';
 $_lang['partnerprogram_object_update'] = 'Изменить объект';
@@ -91,6 +96,7 @@ $_lang['partnerprogram_object_err_nf'] = 'Объект не найден.';
 $_lang['partnerprogram_object_err_ns'] = 'Объект не указан.';
 $_lang['partnerprogram_object_err_remove'] = 'Ошибка при удалении Объекта.';
 $_lang['partnerprogram_object_err_save'] = 'Ошибка при сохранении Объекта.';
+$_lang['partnerprogram_object_update_required'] = 'Заполните все обязательные поля.';
 
 $_lang['partnerprogram_grid_search'] = 'Поиск';
 $_lang['partnerprogram_grid_actions'] = 'Действия';
